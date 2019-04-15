@@ -1,5 +1,10 @@
 import tweepy
+import clean_text
+import pprint
 
+NUMBER_OF_TWEETS_CHECKED = 5
+
+# boilerplate stuff
 with open('keys.txt', 'r') as keysfile:
     keys = keysfile.readlines()
     CONSUMER_KEY = keys[0].rstrip()
@@ -12,14 +17,20 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 api = tweepy.API(auth)
 
+# read list of users
 with open('userlist.txt', 'r') as usersfile:
     users = []
     for user in usersfile.readlines():
         users.append(user.rstrip())
 
+# makes list of user and machine safe tweets
 master_text = {}
 
 for user in users:
-    for text in (tweet.text for tweet in api.user_timeline(user, count=5)):
-        # user_safe = FIGURE THIS BIT OUT NEXT BASICALLY YOU NEED TO APPEND MASTER_TEXT WITH THE TWITTERUSER:{USER_SAME: TEXT, MACHINE_SAME, TEXT}
-    print('\n')
+    master_text[user] = []
+    for tweet in api.user_timeline(user, count=NUMBER_OF_TWEETS_CHECKED, tweet_mode='extended'):
+        user_safe = clean_text.make_user_safe(tweet)
+        machine_safe = clean_text.make_machine_safe(tweet)
+        master_text[user].append({'user_safe': user_safe, 'machine_safe': machine_safe})
+
+print(master_text)
