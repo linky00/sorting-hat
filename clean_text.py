@@ -2,6 +2,7 @@ import re
 
 def make_user_safe(tweet):
     result = retweet_fixed(tweet)
+    result = "".join(i for i in result if ord(i)<128)
     result = re.sub(r'^RT', "(RETWEETED)", result)
     if tweet.is_quote_status:
         result = re.sub(r'https:\/\/t\.co\/\w+$', "(QUOTED TWEET HERE)", result)
@@ -11,6 +12,7 @@ def make_user_safe(tweet):
 
 def make_machine_safe(tweet):
     result = retweet_fixed(tweet)
+    result = "".join(i for i in result if ord(i)<128)
     result = result.replace("\n", " ")
     result = re.sub(r'RT', "RETWEETEDHERE", result)
     if tweet.is_quote_status:
