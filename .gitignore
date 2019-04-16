@@ -3,3 +3,6 @@ userlist.txt
 .vscode
 __pycache__
 *.csv
+build
+dist
+*.spec

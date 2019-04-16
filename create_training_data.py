@@ -12,6 +12,8 @@ Try to avoid ignoring a house or picking it constantly, however, don't let this 
 
 Retweets will start with '(RETWEETED)', and if the tweet is quoting another or has media attatched it will end in '(QUOTED TWEET HERE)' or '(IMAGE(S) HERE)' respectively. Sadly, I can't display them normally, so you'll just have to guess from context.
 
+Also, if ANY of the tweets aren't in English, please press 'NOT ENGLISH'.
+
 When you're done, please send the created .csv file(s) back to me!
 
 Start by selecting one of the userlist files I sent you..."""
@@ -68,9 +70,10 @@ with open('output' + users[0] + '.csv', 'w+') as output_file:
             long_text = long_text + tweet['machine_safe'] + " "
         long_text.replace("\"", "\"\"")
         # make decision
-        decision = easygui.buttonbox(gui_text, "Classify these tweets", ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"])
-        # put this into the file
-        output_file.write("\"" + long_text + "\", " + str(HOUSE_INDEX[decision]) + '\n')
+        decision = easygui.buttonbox(gui_text, "Classify these tweets", ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff", "NOT ENGLISH"])
+        # put this into the file (if english)
+        if decision != "NOT ENGLISH":
+            output_file.write("\"" + long_text + "\", " + str(HOUSE_INDEX[decision]) + '\n')
 
 # finished message
 easygui.msgbox(FINISHED_MESSAGE, "Bye!")
